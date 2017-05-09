@@ -1,12 +1,22 @@
 use serde_json::{Value};
 use object_builder;
 
+
 /// Provides functionality to create custom JSON presenters for your structs.
 ///
 /// ## Example
 ///
 /// ```
 /// use jsonway::{self, Serializer};
+/// use serde_json::{Value};
+///
+/// fn find_path<'a>(json_data: &'a Value, path: &[&str]) -> Option<&'a Value> {
+///     let mut pointer_str = String::new();
+///     for entry in path.iter() {
+///         pointer_str = format!("{}/{}", pointer_str, entry);
+///     }
+///     json_data.pointer(&pointer_str)
+/// }
 ///
 /// struct Jedi {
 ///     name: String
@@ -27,7 +37,7 @@ use object_builder;
 /// let json = JediSerializer{jedi: &jedi}.serialize(true);
 ///
 /// assert_eq!(
-///     json.find_path(&[
+///     find_path(json, &[
 ///         "jedi",
 ///         "name",
 ///     ]).unwrap().as_str().unwrap(),
@@ -61,6 +71,15 @@ pub trait Serializer {
 ///
 /// ```
 /// use jsonway::{self, ObjectSerializer};
+/// use serde_json::{Value};
+///
+/// fn find_path<'a>(json_data: &'a Value, path: &[&str]) -> Option<&'a Value> {
+///     let mut pointer_str = String::new();
+///     for entry in path.iter() {
+///         pointer_str = format!("{}/{}", pointer_str, entry);
+///     }
+///     json_data.pointer(&pointer_str)
+/// }
 ///
 /// struct Jedi {
 ///     name: String
@@ -79,7 +98,7 @@ pub trait Serializer {
 /// let json = JediSerializer.serialize(&jedi, true);
 ///
 /// assert_eq!(
-///     json.find_path(&[
+///     find_path(json, &[
 ///         "jedi",
 ///         "name",
 ///     ]).unwrap().as_str().unwrap(),
@@ -112,6 +131,15 @@ pub trait ObjectSerializer<T> {
 ///
 /// ```rust
 /// use jsonway::{self, ObjectScopeSerializer};
+/// use serde_json::{Value};
+///
+/// fn find_path<'a>(json_data: &'a Value, path: &[&str]) -> Option<&'a Value> {
+///     let mut pointer_str = String::new();
+///     for entry in path.iter() {
+///         pointer_str = format!("{}/{}", pointer_str, entry);
+///     }
+///     json_data.pointer(&pointer_str)
+/// }
 ///
 /// struct User {
 ///     id: u64,
@@ -145,7 +173,7 @@ pub trait ObjectSerializer<T> {
 /// let json = JediSerializer.serialize(&jedi, &current_user, true);
 ///
 /// assert_eq!(
-///     json.find_path(&[
+///     find_path(json, &[
 ///         "jedi",
 ///         "name",
 ///     ]).unwrap().as_str().unwrap(),
@@ -153,7 +181,7 @@ pub trait ObjectSerializer<T> {
 /// );
 ///
 /// assert_eq!(
-///     json.find_path(&[
+///     find_path(json, &[
 ///         "jedi",
 ///         "secret",
 ///     ]).unwrap().as_str().unwrap(),
